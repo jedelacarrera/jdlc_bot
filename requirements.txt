@@ -4,7 +4,6 @@ simplejson==3.8.2
 six==1.10.0
 sklearn==0.0
 stevedore==1.17.0
-system-service==0.3
 telepot==12.3
 terminado==0.6
 testpath==0.3
