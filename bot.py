@@ -106,6 +106,7 @@ class Player(telepot.aio.helper.ChatHandler):
 	async def on__idle(self, event):
 		# print('on__idle')
 		try:
+			await self.sender.sendMessage('See you later...')
 			self.close()
 		except:
 			print('Error closing')
