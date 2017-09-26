@@ -116,13 +116,13 @@ class Player(telepot.aio.helper.ChatHandler):
 
 
 TOKEN = os.getenv("TOKEN", False)
-TIMEOUT = os.getenv("TIMEOUT", 10)
+TIMEOUT = int(os.getenv("TIMEOUT", 10))
 if not TOKEN:
 	sys.exit(1)
 
 bot = telepot.aio.DelegatorBot(TOKEN, [
     pave_event_space()(
-        per_chat_id(), create_open, Player, timeout=10),
+        per_chat_id(), create_open, Player, timeout=TIMEOUT),
 ])
 
 loop = asyncio.get_event_loop()
