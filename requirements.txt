@@ -37,7 +37,6 @@ nbconvert==5.1.1
 nbformat==4.3.0
 networkx==1.9
 oauthlib==1.0.3
-onboard==1.2.0
 padme==1.1.1
 pandocfilters==1.4.1
 pbr==1.10.0
