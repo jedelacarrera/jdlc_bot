@@ -109,6 +109,10 @@ class Player(telepot.aio.helper.ChatHandler):
 	# 	self.close()
 	# 	# print('not error here')
 
+	async def on_close(self, e):
+		print(e)
+		# self.close()
+
 
 TOKEN = "332206016:AAGW4YCE24LL-cUrXsBZ83BshyUK9ejpnOs"
 
