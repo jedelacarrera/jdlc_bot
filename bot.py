@@ -103,9 +103,6 @@ class Player(telepot.aio.helper.ChatHandler):
 	async def on__idle(self, event):
 		self.close()
 
-for a in FUN_FACTS:
-	print(a)
-
 
 TOKEN = "332206016:AAGW4YCE24LL-cUrXsBZ83BshyUK9ejpnOs"
 
