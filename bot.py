@@ -118,6 +118,8 @@ class Player(telepot.aio.helper.ChatHandler):
 TOKEN = os.getenv("TOKEN", False)
 TIMEOUT = int(os.getenv("TIMEOUT", 10))
 if not TOKEN:
+	print('not token')
+	print(TIMEOUT)
 	sys.exit(1)
 
 bot = telepot.aio.DelegatorBot(TOKEN, [
