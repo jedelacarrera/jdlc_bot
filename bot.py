@@ -84,14 +84,17 @@ class Player(telepot.aio.helper.ChatHandler):
 			return
 
 		# check the guess against the answer ...
-		if text	== 'btc':
-			response_text = self.btc()
-		elif text == 'eth':
-			response_text = self.eth()
-		elif text == 'hi':
-			response_text = self.hi(msg)
-		else:
-			response_text = self.other_response()
+		try:
+			if text	== 'btc':
+				response_text = self.btc()
+			elif text == 'eth':
+				response_text = self.eth()
+			elif text == 'hi':
+				response_text = self.hi(msg)
+			else:
+				response_text = self.other_response()
+		except:
+			response_text = "There was an error, try again later"
 
 		await self.sender.sendMessage(response_text)
 		return
