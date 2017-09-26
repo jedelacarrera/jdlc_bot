@@ -112,11 +112,14 @@ class Player(telepot.aio.helper.ChatHandler):
 
 	async def on_close(self, e):
 		print(e)
-		# self.close()
+		self.close()
 
 
 TOKEN = os.getenv("TOKEN", False)
 TIMEOUT = int(os.getenv("TIMEOUT", 10))
+print(TOKEN)
+print(TIMEOUT)
+
 if not TOKEN:
 	print('not token')
 	print(TIMEOUT)
