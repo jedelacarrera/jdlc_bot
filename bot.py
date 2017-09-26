@@ -64,11 +64,18 @@ class Player(telepot.aio.helper.ChatHandler):
 
 	async def open(self, initial_msg, seed):
 		print(initial_msg)
-		await self.sender.sendMessage(
-			"""Hi {}, send me one of these:
+		try:
+			message = """Hi {}, send me one of these:
 			btc (for bitcoin value in surbtc)
 			eth (for ethereum value in surbtc)
-			hi (for a greeting message)""".format(initial_msg["from"]["first_name"] + " " + initial_msg["from"]["last_name"]))
+			hi (for a greeting message)""".format(initial_msg["from"]["first_name"] + " " + initial_msg["from"]["last_name"])
+		except:
+			message = """Hi, send me one of these:
+			btc (for bitcoin value in surbtc)
+			eth (for ethereum value in surbtc)
+			hi (for a greeting message)"""
+		await self.sender.sendMessage(message)
+			
 		return True  # prevent on_message() from being called on the initial message
 
 	async def on_chat_message(self, msg):
