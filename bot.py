@@ -88,11 +88,11 @@ class Player(telepot.aio.helper.ChatHandler):
 
 		# check the guess against the answer ...
 		try:
-			if text	== 'btc':
+			if text in ['btc', 'Btc', 'BTC', '/btc']:
 				response_text = self.btc()
-			elif text == 'eth':
+			elif text in ['eth', 'Eth', 'ETH', '/eth']:
 				response_text = self.eth()
-			elif text == 'hi':
+			elif text in ['hi', 'Hi', 'HI', '/hi']:
 				response_text = self.hi(msg)
 			else:
 				response_text = self.other_response()
