@@ -103,14 +103,11 @@ class Player(telepot.aio.helper.ChatHandler):
 		return
 
 
-	async def on__idle(self, event):
-		# print('on__idle')
-		try:
-			# await self.sender.sendMessage('See you later...')
-			self.close()
-		except Exception as e:
-			print('Error closing {}'.format(e))
-		# print('not error here')
+	# async def on__idle(self, event):
+	# 	# print('on__idle')
+	# 	# await self.sender.sendMessage('See you later...')
+	# 	self.close()
+	# 	# print('not error here')
 
 
 TOKEN = "332206016:AAGW4YCE24LL-cUrXsBZ83BshyUK9ejpnOs"
