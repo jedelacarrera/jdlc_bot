@@ -63,7 +63,7 @@ class Player(telepot.aio.helper.ChatHandler):
 		return "Did you know?\n" + random.choice(FUN_FACTS)
 
 	async def open(self, initial_msg, seed):
-		print(initial_msg)
+		# print(initial_msg)
 		try:
 			message = """Hi {}, send me one of these:
 			btc (for bitcoin value in surbtc)
@@ -79,7 +79,7 @@ class Player(telepot.aio.helper.ChatHandler):
 		return True  # prevent on_message() from being called on the initial message
 
 	async def on_chat_message(self, msg):
-		print(msg)
+		# print(msg)
 		try:
 			text = msg['text']
 		except ValueError:
@@ -104,16 +104,19 @@ class Player(telepot.aio.helper.ChatHandler):
 
 
 	async def on__idle(self, event):
-		print('on__idle')
-		self.close()
-		print('not error here')
+		# print('on__idle')
+		try:
+			self.close()
+		except:
+			print('Error closing')
+		# print('not error here')
 
 
 TOKEN = "332206016:AAGW4YCE24LL-cUrXsBZ83BshyUK9ejpnOs"
 
 bot = telepot.aio.DelegatorBot(TOKEN, [
     pave_event_space()(
-        per_chat_id(), create_open, Player, timeout=100),
+        per_chat_id(), create_open, Player, timeout=10),
 ])
 
 loop = asyncio.get_event_loop()
