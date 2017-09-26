@@ -9,7 +9,7 @@ import simplejson as json
 import random
 
 FUN_FACTS = [
-	"McDonalds calls frequent buyers of their food “heavy users.",
+	"McDonalds calls frequent buyers of their food heavy users.",
 	"The average person spends 6 months of their lifetime waiting on a red light to turn green.",
 	"The largest recorded snowflake was in Keogh, MT during year 1887, and was 15 inches wide.",
 	"You burn more calories sleeping than you do watching television.",
@@ -102,6 +102,9 @@ class Player(telepot.aio.helper.ChatHandler):
 
 	async def on__idle(self, event):
 		self.close()
+
+for a in FUN_FACTS:
+	print(a)
 
 
 TOKEN = "332206016:AAGW4YCE24LL-cUrXsBZ83BshyUK9ejpnOs"
