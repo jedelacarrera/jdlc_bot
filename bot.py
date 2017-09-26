@@ -63,6 +63,7 @@ class Player(telepot.aio.helper.ChatHandler):
 		return "Did you know?\n" + random.choice(FUN_FACTS)
 
 	async def open(self, initial_msg, seed):
+		print(initial_msg)
 		await self.sender.sendMessage(
 			"""Hi {}, send me one of these:
 			btc (for bitcoin value in surbtc)
@@ -71,12 +72,7 @@ class Player(telepot.aio.helper.ChatHandler):
 		return True  # prevent on_message() from being called on the initial message
 
 	async def on_chat_message(self, msg):
-		content_type, chat_type, chat_id = telepot.glance(msg)
-
-		if content_type != 'text':
-			await self.sender.sendMessage('Wrong input type')
-			return
-
+		print(msg)
 		try:
 			text = msg['text']
 		except ValueError:
