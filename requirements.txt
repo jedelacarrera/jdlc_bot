@@ -1,0 +1,5 @@
+async-timeout==1.4.0
+asyncio==3.4.3
+requests==2.9.1
+simplejson==3.8.2
+telepot==12.3
