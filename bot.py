@@ -101,7 +101,7 @@ class Player(telepot.aio.helper.ChatHandler):
 		self.close()
 
 
-TOKEN = sys.argv[1]
+TOKEN = "332206016:AAGW4YCE24LL-cUrXsBZ83BshyUK9ejpnOs"
 
 bot = telepot.aio.DelegatorBot(TOKEN, [
     pave_event_space()(

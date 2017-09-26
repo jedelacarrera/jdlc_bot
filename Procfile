@@ -1,1 +1,1 @@
-web: python3 bot.py 332206016:AAGW4YCE24LL-cUrXsBZ83BshyUK9ejpnOs
+web: python bot.py
