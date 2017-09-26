@@ -103,8 +103,10 @@ class Player(telepot.aio.helper.ChatHandler):
 		return
 
 
-	# async def on__idle(self, event):
-	# 	self.close()
+	async def on__idle(self, event):
+		print('on__idle')
+		self.close()
+		print('not error here')
 
 
 TOKEN = "332206016:AAGW4YCE24LL-cUrXsBZ83BshyUK9ejpnOs"
