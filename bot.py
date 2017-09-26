@@ -106,10 +106,10 @@ class Player(telepot.aio.helper.ChatHandler):
 	async def on__idle(self, event):
 		# print('on__idle')
 		try:
-			await self.sender.sendMessage('See you later...')
+			# await self.sender.sendMessage('See you later...')
 			self.close()
-		except:
-			print('Error closing')
+		except Exception as e:
+			print('Error closing {}'.format(e))
 		# print('not error here')
 
 
@@ -117,7 +117,7 @@ TOKEN = "332206016:AAGW4YCE24LL-cUrXsBZ83BshyUK9ejpnOs"
 
 bot = telepot.aio.DelegatorBot(TOKEN, [
     pave_event_space()(
-        per_chat_id(), create_open, Player, timeout=10),
+        per_chat_id(), create_open, Player, timeout=1000),
 ])
 
 loop = asyncio.get_event_loop()
