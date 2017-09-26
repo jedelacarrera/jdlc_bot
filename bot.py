@@ -1,4 +1,5 @@
 import sys
+import os
 import asyncio
 import telepot
 import telepot.aio
@@ -114,7 +115,10 @@ class Player(telepot.aio.helper.ChatHandler):
 		# self.close()
 
 
-TOKEN = "332206016:AAGW4YCE24LL-cUrXsBZ83BshyUK9ejpnOs"
+TOKEN = os.getenv("TOKEN", False)
+TIMEOUT = os.getenv("TIMEOUT", 10)
+if not TOKEN:
+	sys.exit(1)
 
 bot = telepot.aio.DelegatorBot(TOKEN, [
     pave_event_space()(
