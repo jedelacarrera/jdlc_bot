@@ -117,7 +117,7 @@ TOKEN = "332206016:AAGW4YCE24LL-cUrXsBZ83BshyUK9ejpnOs"
 
 bot = telepot.aio.DelegatorBot(TOKEN, [
     pave_event_space()(
-        per_chat_id(), create_open, Player, timeout=1000),
+        per_chat_id(), create_open, Player, timeout=10),
 ])
 
 loop = asyncio.get_event_loop()
