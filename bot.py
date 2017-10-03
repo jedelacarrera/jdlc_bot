@@ -48,7 +48,7 @@ class Player(telepot.aio.helper.ChatHandler):
 	def btc(self):
 		info = requests.get("https://www.surbtc.com/api/v2/markets/btc-clp/ticker.json")
 		info = info.json()
-		text = "btc compra: {}\nbtc venta: {}\nVariacion 24h: {}\nVariacion 7d: {}".format(
+		text = "btc compra: ${}\nbtc venta: ${}\nVariacion 24h: {}\nVariacion 7d: {}".format(
 			info["ticker"]["max_bid"][0],
 			info["ticker"]["min_ask"][0],
 			info["ticker"]["price_variation_24h"],
@@ -59,7 +59,7 @@ class Player(telepot.aio.helper.ChatHandler):
 	def eth(self):
 		info = requests.get("https://www.surbtc.com/api/v2/markets/eth-clp/ticker.json")
 		info = info.json()
-		text = "eth compra: {}\neth venta: {}\nVariacion 24h: {}\nVariacion 7d: {}".format(
+		text = "eth compra: ${}\neth venta: ${}\nVariacion 24h: {}\nVariacion 7d: {}".format(
 			info["ticker"]["max_bid"][0],
 			info["ticker"]["min_ask"][0],
 			info["ticker"]["price_variation_24h"],
@@ -70,13 +70,13 @@ class Player(telepot.aio.helper.ChatHandler):
 	def dolar(self):
 		info = requests.get("http://mindicador.cl/api/")
 		info = info.json()["dolar"]
-		text = "Precio dolar {}: {}".format(info["fecha"][:10], info["valor"])
+		text = "Precio dolar {}: ${}".format(info["fecha"][:10], info["valor"])
 		return text
 
 	def btc_bittrex(self):
 		info = requests.get("https://bittrex.com/api/v1.1/public/getticker", data={"market": "USDT-BTC"}).json()
 		dolar = float(requests.get("http://mindicador.cl/api/").json()["dolar"]["valor"])
-		text = "btc compra: {:.2f} -> {:.0f}\nbtc venta: {:.2f} -> {:.0f}".format(
+		text = "btc compra: US${:,.0f} -> ${:,.0f}\nbtc venta: US${:,.0f} -> ${:,.0f}".format(
 			info["result"]["Bid"], info["result"]["Bid"] * dolar,
 			info["result"]["Ask"], info["result"]["Ask"] * dolar,
 			)
@@ -85,7 +85,7 @@ class Player(telepot.aio.helper.ChatHandler):
 	def eth_bittrex(self):
 		info = requests.get("https://bittrex.com/api/v1.1/public/getticker", data={"market": "USDT-ETH"}).json()
 		dolar = float(requests.get("http://mindicador.cl/api/").json()["dolar"]["valor"])
-		text = "eth compra: {:.2f} -> {:.0f}\neth venta: {:.2f} -> {:.0f}".format(
+		text = "eth compra: US${:,.2f} -> ${:,.0f}\neth venta: US${:,.2f} -> ${:,.0f}".format(
 			info["result"]["Bid"], info["result"]["Bid"] * dolar,
 			info["result"]["Ask"], info["result"]["Ask"] * dolar,
 			)
