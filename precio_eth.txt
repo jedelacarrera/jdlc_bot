@@ -1,0 +1,9 @@
+{
+    "success": true,
+    "message": "",
+    "result": {
+        "Last": 291.0,
+        "Ask": 291.0,
+        "Bid": 289.99999991
+    }
+}

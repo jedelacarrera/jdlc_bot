@@ -8,6 +8,7 @@ from telepot.aio.delegate import per_chat_id, create_open, pave_event_space
 import requests
 import simplejson as json
 import random
+import re
 
 FUN_FACTS = [
 	"McDonalds calls frequent buyers of their food heavy users.",
@@ -31,6 +32,15 @@ FUN_FACTS = [
 
 
 class Player(telepot.aio.helper.ChatHandler):
+	btc_re = re.compile(r"^(\/)*btc$", re.IGNORECASE)
+	eth_re = re.compile(r"^(\/)*eth$", re.IGNORECASE)
+	hi_re = re.compile(r"^(\/)*hi$", re.IGNORECASE)
+	dolar_re = re.compile(r"^(\/)*dolar$", re.IGNORECASE)
+
+	btc_bittrex_re = re.compile(r"^(\/)*btc_", re.IGNORECASE)
+	eth_bittrex_re = re.compile(r"^(\/)*eth_", re.IGNORECASE)
+
+
 	def __init__(self, *args, **kwargs):
 		super(Player, self).__init__(*args, **kwargs)
 		self._answer = random.randint(0,99)
@@ -54,6 +64,30 @@ class Player(telepot.aio.helper.ChatHandler):
 			info["ticker"]["min_ask"][0],
 			info["ticker"]["price_variation_24h"],
 			info["ticker"]["price_variation_7d"]
+			)
+		return text
+
+	def dolar(self):
+		info = requests.get("http://mindicador.cl/api/")
+		info = info.json()["dolar"]
+		text = "Precio dolar {}: {}".format(info["fecha"][:10], info["valor"])
+		return text
+
+	def btc_bittrex(self):
+		info = requests.get("https://bittrex.com/api/v1.1/public/getticker", data={"market": "USDT-BTC"}).json()
+		dolar = float(requests.get("http://mindicador.cl/api/").json()["dolar"]["valor"])
+		text = "btc compra: {:.2f} -> {:.0f}\nbtc venta: {:.2f} -> {:.0f}".format(
+			info["result"]["Bid"], info["result"]["Bid"] * dolar,
+			info["result"]["Ask"], info["result"]["Ask"] * dolar,
+			)
+		return text
+
+	def eth_bittrex(self):
+		info = requests.get("https://bittrex.com/api/v1.1/public/getticker", data={"market": "USDT-ETH"}).json()
+		dolar = float(requests.get("http://mindicador.cl/api/").json()["dolar"]["valor"])
+		text = "eth compra: {:.2f} -> {:.0f}\neth venta: {:.2f} -> {:.0f}".format(
+			info["result"]["Bid"], info["result"]["Bid"] * dolar,
+			info["result"]["Ask"], info["result"]["Ask"] * dolar,
 			)
 		return text
 
@@ -89,16 +123,28 @@ class Player(telepot.aio.helper.ChatHandler):
 
 		# check the guess against the answer ...
 		try:
-			if text in ['btc', 'Btc', 'BTC', '/btc']:
+			if Player.btc_re.match(text) != None:
 				response_text = self.btc()
-			elif text in ['eth', 'Eth', 'ETH', '/eth']:
+
+			elif Player.eth_re.match(text) != None:
 				response_text = self.eth()
-			elif text in ['hi', 'Hi', 'HI', '/hi']:
+
+			elif Player.dolar_re.match(text) != None:
+				response_text = self.dolar()
+
+			elif Player.btc_bittrex_re.match(text) != None:
+				response_text = self.btc_bittrex()
+
+			elif Player.eth_bittrex_re.match(text) != None:
+				response_text = self.eth_bittrex()
+
+			elif Player.hi_re.match(text) != None:
 				response_text = self.hi(msg)
+
 			else:
 				response_text = self.other_response()
-		except:
-			response_text = "There was an error, try again later"
+		except Exception as e:
+			response_text = "There was an error, try again later\nError: {}".format(e)
 
 		await self.sender.sendMessage(response_text)
 		return
@@ -115,9 +161,9 @@ class Player(telepot.aio.helper.ChatHandler):
 		# self.close()
 
 
-TOKEN = os.getenv("TOKEN", False)
+TOKEN = os.getenv("TOKEN", "479455539:AAERXML5_y6sAZp_2EpziB7mUSNYONNiduo")
 TIMEOUT = int(os.getenv("TIMEOUT", 10))
-print(TOKEN)
+# print(TOKEN)
 print(TIMEOUT)
 
 if not TOKEN:

@@ -16,7 +16,7 @@ get a greeting message
 ### other message
 get a random fun fact
 
-## files
+## Files
 
 ### Procfile
 Tells Heroku what command to execute
