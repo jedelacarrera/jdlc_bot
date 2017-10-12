@@ -143,10 +143,10 @@ class Player(telepot.aio.helper.ChatHandler):
 				response_text = self.hi(msg)
 			elif Player.all_re.match(text) != None:
 				response_text = self.dolar()
-				response_text += '\n' + self.btc()
-				response_text += '\n' + self.btc_bittrex()
-				response_text += '\n' + self.eth()
-				response_text += '\n' + self.eth_bittrex()
+				response_text += '\n\n' + self.btc()
+				response_text += '\n\n' + self.btc_bittrex()
+				response_text += '\n\n' + self.eth()
+				response_text += '\n\n' + self.eth_bittrex()
 
 			else:
 				response_text = self.other_response()
