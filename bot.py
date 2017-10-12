@@ -36,6 +36,7 @@ class Player(telepot.aio.helper.ChatHandler):
 	eth_re = re.compile(r"^(\/)*eth$", re.IGNORECASE)
 	hi_re = re.compile(r"^(\/)*hi$", re.IGNORECASE)
 	dolar_re = re.compile(r"^(\/)*dolar$", re.IGNORECASE)
+	all_re = re.compile(r"^(\/)*all$", re.IGNORECASE)
 
 	btc_bittrex_re = re.compile(r"^(\/)*btc_", re.IGNORECASE)
 	eth_bittrex_re = re.compile(r"^(\/)*eth_", re.IGNORECASE)
@@ -140,6 +141,12 @@ class Player(telepot.aio.helper.ChatHandler):
 
 			elif Player.hi_re.match(text) != None:
 				response_text = self.hi(msg)
+			elif Player.all_re.match(text) != None:
+				response_text = self.dolar()
+				response_text += '\n' + self.btc()
+				response_text += '\n' + self.btc_bittrex()
+				response_text += '\n' + self.eth()
+				response_text += '\n' + self.eth_bittrex()
 
 			else:
 				response_text = self.other_response()
