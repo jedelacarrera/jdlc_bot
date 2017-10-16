@@ -50,7 +50,7 @@ class Player(telepot.aio.helper.ChatHandler):
 	def btc(self):
 		info = requests.get("https://www.surbtc.com/api/v2/markets/btc-clp/ticker.json")
 		info = info.json()
-		text = "btc compra: ${:,.0f}\nbtc venta: ${:,.0f}\nVariacion 24h: {}%\nVariacion 7d: {}%".format(
+		text = "btc compra: ${:,.0f}\nbtc venta: ${:,.0f}\nVariacion 24h: {:,.1f}%\nVariacion 7d: {:,.1f}%".format(
 			float(info["ticker"]["max_bid"][0]),
 			float(info["ticker"]["min_ask"][0]),
 			float(info["ticker"]["price_variation_24h"])*100,
@@ -61,7 +61,7 @@ class Player(telepot.aio.helper.ChatHandler):
 	def eth(self):
 		info = requests.get("https://www.surbtc.com/api/v2/markets/eth-clp/ticker.json")
 		info = info.json()
-		text = "eth compra: ${:,.0f}\neth venta: ${:,.0f}\nVariacion 24h: {}%\nVariacion 7d: {}%".format(
+		text = "eth compra: ${:,.0f}\neth venta: ${:,.0f}\nVariacion 24h: {:,.1f}%\nVariacion 7d: {:,.1f}%".format(
 			float(info["ticker"]["max_bid"][0]),
 			float(info["ticker"]["min_ask"][0]),
 			float(info["ticker"]["price_variation_24h"])*100,
