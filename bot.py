@@ -9,6 +9,7 @@ import requests
 import simplejson as json
 import random
 import re
+import time
 
 FUN_FACTS = [
 	"McDonalds calls frequent buyers of their food heavy users.",
@@ -52,8 +53,8 @@ class Player(telepot.aio.helper.ChatHandler):
 		text = "btc compra: ${:,.0f}\nbtc venta: ${:,.0f}\nVariacion 24h: {}%\nVariacion 7d: {}%".format(
 			float(info["ticker"]["max_bid"][0]),
 			float(info["ticker"]["min_ask"][0]),
-			float(info["ticker"]["price_variation_24h"]*100),
-			float(info["ticker"]["price_variation_7d"]*100)
+			float(info["ticker"]["price_variation_24h"])*100,
+			float(info["ticker"]["price_variation_7d"])*100
 			)
 		return text
 
@@ -63,8 +64,8 @@ class Player(telepot.aio.helper.ChatHandler):
 		text = "eth compra: ${:,.0f}\neth venta: ${:,.0f}\nVariacion 24h: {}%\nVariacion 7d: {}%".format(
 			float(info["ticker"]["max_bid"][0]),
 			float(info["ticker"]["min_ask"][0]),
-			float(info["ticker"]["price_variation_24h"]*100),
-			float(info["ticker"]["price_variation_7d"]*100)
+			float(info["ticker"]["price_variation_24h"])*100,
+			float(info["ticker"]["price_variation_7d"])*100
 			)
 		return text
 
@@ -101,15 +102,9 @@ class Player(telepot.aio.helper.ChatHandler):
 	async def open(self, initial_msg, seed):
 		# print(initial_msg)
 		try:
-			message = """Hi {}, send me one of these:
-			btc (for bitcoin value in surbtc)
-			eth (for ethereum value in surbtc)
-			hi (for a greeting message)""".format(initial_msg["from"]["first_name"] + " " + initial_msg["from"]["last_name"])
+			message = "Hi {},\nwatch the commands list to make an action".format(initial_msg["from"]["first_name"] + " " + initial_msg["from"]["last_name"])
 		except:
-			message = """Hi, send me one of these:
-			btc (for bitcoin value in surbtc)
-			eth (for ethereum value in surbtc)
-			hi (for a greeting message)"""
+			message = "Hi,\nwatch the commands list to make an action"
 		await self.sender.sendMessage(message)
 			
 		return True  # prevent on_message() from being called on the initial message
@@ -144,15 +139,20 @@ class Player(telepot.aio.helper.ChatHandler):
 				
 			elif Player.all_re.match(text) != None:
 				response_text = self.dolar()
+				
 				response_text += '\n\n' + self.eth()
 				response_text += '\n\n' + self.eth_bittrex()
+				time.sleep(1)
 				response_text += '\n\n' + self.btc()
 				response_text += '\n\n' + self.btc_bittrex()
+				
+
 
 			else:
 				response_text = self.other_response()
 		except Exception as e:
 			response_text = "There was an error, try again later\nError: {}".format(e)
+			raise e
 
 		await self.sender.sendMessage(response_text)
 		return
@@ -170,7 +170,7 @@ class Player(telepot.aio.helper.ChatHandler):
 
 
 TOKEN = os.getenv("TOKEN", "479455539:AAERXML5_y6sAZp_2EpziB7mUSNYONNiduo")
-TIMEOUT = int(os.getenv("TIMEOUT", 10))
+TIMEOUT = int(os.getenv("TIMEOUT", 100))
 # print(TOKEN)
 print(TIMEOUT)
 
