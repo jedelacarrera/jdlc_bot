@@ -50,10 +50,10 @@ class Player(telepot.aio.helper.ChatHandler):
 		info = requests.get("https://www.surbtc.com/api/v2/markets/btc-clp/ticker.json")
 		info = info.json()
 		text = "btc compra: ${:,.0f}\nbtc venta: ${:,.0f}\nVariacion 24h: {}%\nVariacion 7d: {}%".format(
-			info["ticker"]["max_bid"][0],
-			info["ticker"]["min_ask"][0],
-			info["ticker"]["price_variation_24h"]*100,
-			info["ticker"]["price_variation_7d"]*100
+			float(info["ticker"]["max_bid"][0]),
+			float(info["ticker"]["min_ask"][0]),
+			float(info["ticker"]["price_variation_24h"]*100),
+			float(info["ticker"]["price_variation_7d"]*100)
 			)
 		return text
 
@@ -61,10 +61,10 @@ class Player(telepot.aio.helper.ChatHandler):
 		info = requests.get("https://www.surbtc.com/api/v2/markets/eth-clp/ticker.json")
 		info = info.json()
 		text = "eth compra: ${:,.0f}\neth venta: ${:,.0f}\nVariacion 24h: {}%\nVariacion 7d: {}%".format(
-			info["ticker"]["max_bid"][0],
-			info["ticker"]["min_ask"][0],
-			info["ticker"]["price_variation_24h"]*100,
-			info["ticker"]["price_variation_7d"]*100
+			float(info["ticker"]["max_bid"][0]),
+			float(info["ticker"]["min_ask"][0]),
+			float(info["ticker"]["price_variation_24h"]*100),
+			float(info["ticker"]["price_variation_7d"]*100)
 			)
 		return text
 
