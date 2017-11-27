@@ -106,6 +106,10 @@ class Player(telepot.aio.helper.ChatHandler):
 		except:
 			message = "Hi,\nwatch the commands list to make an action"
 		await self.sender.sendMessage(message)
+		try:
+			self.on_chat_message(initial_msg)
+		except:
+			pass
 			
 		return True  # prevent on_message() from being called on the initial message
 
