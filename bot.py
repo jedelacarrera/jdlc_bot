@@ -114,7 +114,7 @@ class Player(telepot.aio.helper.ChatHandler):
 		return True  # prevent on_message() from being called on the initial message
 
 	async def on_chat_message(self, msg):
-		print(msg)
+		# print(msg)
 		try:
 			text = msg['text']
 		except ValueError:
