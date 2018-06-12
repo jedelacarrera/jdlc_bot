@@ -5,18 +5,13 @@ import telepot
 import telepot.aio
 from telepot.aio.loop import MessageLoop
 from telepot.aio.delegate import per_chat_id, create_open, pave_event_space
-import requests
-import simplejson as json
 import random
-import re
 from fun_bot.main import FunBot
 from list_bot.main import ListBot
 from crypto_bot.main import CryptoBot
 
 
 class Bot(telepot.aio.helper.ChatHandler):
-
-	hi_re = re.compile(r"^(\/)*hi$", re.IGNORECASE)
 
 	def __init__(self, *args, **kwargs):
 		super(Bot, self).__init__(*args, **kwargs)
@@ -25,16 +20,12 @@ class Bot(telepot.aio.helper.ChatHandler):
 		self.crypto_bot = CryptoBot()
 		self.list_bot = ListBot()
 
-	def hi(self, msg):
-		return "Hello {}, what's up?".format(msg["from"]["first_name"] + " " + msg["from"]["last_name"])
-
 	async def open(self, initial_msg, seed):
-		# print(initial_msg)
-		try:
-			message = "Hi {},\nwatch the commands list to make an action".format(initial_msg["from"]["first_name"] + " " + initial_msg["from"]["last_name"])
-		except:
-			message = "Hi,\nwatch the commands list to make an action"
-		await self.sender.sendMessage(message)
+		# try:
+		# 	message = "Hi {},\nwatch the commands list to make an action".format(initial_msg["from"]["first_name"] + " " + initial_msg["from"]["last_name"])
+		# except:
+		# 	message = "Hi,\nwatch the commands list to make an action"
+		# await self.sender.sendMessage(message)
 		await self.on_chat_message(initial_msg)
 
 		return True  # prevent on_message() from being called on the initial message
@@ -47,44 +38,24 @@ class Bot(telepot.aio.helper.ChatHandler):
 			await self.sender.sendMessage('Give me a string, please.')
 			return
 
-		# check the guess against the answer ...
 		try:
-			if Bot.btc_re.match(text) != None:
-				response_text = self.btc()
+			response = None
 
-			elif Bot.eth_re.match(text) != None:
-				response_text = self.eth()
+			crypto_response = self.crypto_bot.handle_message(msg)
+			list_response = self.list_bot.handle_message(msg)
 
-			elif Bot.dolar_re.match(text) != None:
-				response_text = self.dolar()
+			response = crypto_response if crypto_response != None else response
+			response = list_response if list_response != None else response
 
-			elif Bot.btc_bittrex_re.match(text) != None:
-				response_text = self.btc_bittrex()
-
-			elif Bot.eth_bittrex_re.match(text) != None:
-				response_text = self.eth_bittrex()
-
-			elif Bot.hi_re.match(text) != None:
-				response_text = self.hi(msg)
-				
-			elif Bot.all_re.match(text) != None:
-				response_text = self.dolar()
-				
-				response_text += '\n\n' + self.eth()
-				response_text += '\n\n' + self.eth_bittrex()
-				time.sleep(1)
-				response_text += '\n\n' + self.btc()
-				response_text += '\n\n' + self.btc_bittrex()
-				
+			if response == None:
+				response = self.fun_bot.random()
 
 
-			else:
-				response_text = self.other_response()
 		except Exception as e:
-			response_text = "There was an error, try again later\nError: {}".format(e)
+			response = "There was an error, try again later\nError: {}".format(e)
 			raise e
-
-		await self.sender.sendMessage(response_text)
+		if response:
+			await self.sender.sendMessage(response, parse_mode='Markdown')
 		return
 
 

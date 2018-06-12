@@ -9,37 +9,46 @@ class DbManager(object):
 	INSERT_PARTICIPANT = "INSERT INTO participants (list_id, phone, name, comment, going) VALUES (%s, %s, %s, %s, %s)"
 	GET_PARTICIPANTS_BY_LIST_ID = "SELECT * FROM participants WHERE list_id = %s"
 	GET_ALL_LISTS = "SELECT * FROM lists;"
+	DELETE_PARTICIPANT = "DELETE FROM participants WHERE list_id = %s and phone = %s "
 
 	def __init__(self, database_url):
 		self.database_url = database_url
-		self.connection = psycopg2.connect(DATABASE_URL)
-		self.cursor = connection.cursor()
+		self.connection = psycopg2.connect(database_url)
+		self.cursor = self.connection.cursor()
 
 	def insert_list(self, name, conversation):
 		try:
 			self.cursor.execute(DbManager.INSERT_LIST, (name, conversation))
-		except: pass
+		except Exception as e:
+			print(e)
 
 	def get_list_by_name(self, name, conversation):
 		try: 
 			self.cursor.execute(DbManager.GET_LIST_BY_NAME, (name, conversation))
 			return self.cursor.fetchone()
-		except: return None
+		except Exception as e:
+			print(e)
+			return None
 
 	def get_last_list(self, conversation):
 		try: 
 			self.cursor.execute(DbManager.GET_LAST_LIST, (conversation, ))
 			return self.cursor.fetchone()
-		except: return None
+		except Exception as e: 
+			print(e)
+			return None
 
 	def get_all_lists(self):
 		try: 
 			self.cursor.execute(DbManager.GET_ALL_LISTS)
 			return self.cursor.fetchall()
-		except: return []
+		except Exception as e:
+			print(e)
+			return []
 
 	def insert_participant(self, list_id, phone, name, comment, going):
 		try: 
+			self.cursor.execute(DbManager.DELETE_PARTICIPANT, (list_id, phone))
 			return self.cursor.execute(DbManager.INSERT_PARTICIPANT, (list_id, phone, name, comment, going))
 		except Exception as e:
 			print(e)

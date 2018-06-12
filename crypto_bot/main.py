@@ -17,6 +17,7 @@ class CryptoBot(object):
 		pass
 
 	def handle_message(self, message):
+		message = message["text"]
 		response = None
 		if self.btc_re.match(message) != None:
 			response = self.btc()
@@ -47,6 +48,7 @@ class CryptoBot(object):
 			float(info["ticker"]["price_variation_24h"])*100,
 			float(info["ticker"]["price_variation_7d"])*100
 			)
+		return text
 		
 	def eth(self):
 		info = requests.get("https://www.surbtc.com/api/v2/markets/eth-clp/ticker.json")
