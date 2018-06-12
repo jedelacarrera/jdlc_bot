@@ -73,7 +73,7 @@ class Bot(telepot.aio.helper.ChatHandler):
 TOKEN = os.getenv("TOKEN", "479455539:AAERXML5_y6sAZp_2EpziB7mUSNYONNiduo")
 TIMEOUT = int(os.getenv("TIMEOUT", 100))
 # print(TOKEN)
-print(TIMEOUT)
+print("TIMEOUT: {}".format(TIMEOUT))
 
 if not TOKEN:
 	print('not token')
