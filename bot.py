@@ -9,95 +9,24 @@ import requests
 import simplejson as json
 import random
 import re
-import time
-
-FUN_FACTS = [
-	"McDonalds calls frequent buyers of their food heavy users.",
-	"The average person spends 6 months of their lifetime waiting on a red light to turn green.",
-	"The largest recorded snowflake was in Keogh, MT during year 1887, and was 15 inches wide.",
-	"You burn more calories sleeping than you do watching television.",
-	"There are more lifeforms living on your skin than there are people on the planet.",
-	"Southern sea otters have flaps of skin under their forelegs that act as pockets. When diving, they use these pouches to store rocks and food.",
-	"In 1386 a pig in France was executed by public hanging for the murder of a child.",
-	"One in every five adults believe that aliens are hiding in our planet disguised as humans.",
-	"If you believe that you’re truly one in a million, there are still approximately 7,184 more people out there just like you.",
-	"A single cloud can weight more than 1 million pounds.",
-	"A human will eat on average 70 assorted insects and 10 spiders while sleeping.",
-	"James Buchanan, the 15th U.S. president continuously bought slaves with his own money in order to free them.",
-	"There are more possible iterations of a game of chess than there are atoms in the known universe.",
-	"The average person walks the equivalent of three times around the world in a lifetime.",
-	"Men are 6 times more likely to be struck by lightning than women.",
-	"Coca-Cola would be green if coloring wasn’t added to it.",
-	"You cannot snore and dream at the same time."
-]
+from fun_bot.main import FunBot
+from list_bot.main import ListBot
+from crypto_bot.main import CryptoBot
 
 
-class Player(telepot.aio.helper.ChatHandler):
-	btc_re = re.compile(r"^(\/)*btc$", re.IGNORECASE)
-	eth_re = re.compile(r"^(\/)*eth$", re.IGNORECASE)
+class Bot(telepot.aio.helper.ChatHandler):
+
 	hi_re = re.compile(r"^(\/)*hi$", re.IGNORECASE)
-	dolar_re = re.compile(r"^(\/)*dolar$", re.IGNORECASE)
-	all_re = re.compile(r"^(\/)*all$", re.IGNORECASE)
-
-	btc_bittrex_re = re.compile(r"^(\/)*btc_", re.IGNORECASE)
-	eth_bittrex_re = re.compile(r"^(\/)*eth_", re.IGNORECASE)
-
 
 	def __init__(self, *args, **kwargs):
-		super(Player, self).__init__(*args, **kwargs)
+		super(Bot, self).__init__(*args, **kwargs)
 		self._answer = random.randint(0,99)
-
-	def btc(self):
-		info = requests.get("https://www.surbtc.com/api/v2/markets/btc-clp/ticker.json")
-		info = info.json()
-		text = "btc compra: ${:,.0f}\nbtc venta: ${:,.0f}\nVariacion 24h: {:,.1f}%\nVariacion 7d: {:,.1f}%".format(
-			float(info["ticker"]["max_bid"][0]),
-			float(info["ticker"]["min_ask"][0]),
-			float(info["ticker"]["price_variation_24h"])*100,
-			float(info["ticker"]["price_variation_7d"])*100
-			)
-		return text
-
-	def eth(self):
-		info = requests.get("https://www.surbtc.com/api/v2/markets/eth-clp/ticker.json")
-		info = info.json()
-		text = "eth compra: ${:,.0f}\neth venta: ${:,.0f}\nVariacion 24h: {:,.1f}%\nVariacion 7d: {:,.1f}%".format(
-			float(info["ticker"]["max_bid"][0]),
-			float(info["ticker"]["min_ask"][0]),
-			float(info["ticker"]["price_variation_24h"])*100,
-			float(info["ticker"]["price_variation_7d"])*100
-			)
-		return text
-
-	def dolar(self):
-		info = requests.get("http://mindicador.cl/api/")
-		info = info.json()["dolar"]
-		text = "Precio dolar {}: ${}".format(info["fecha"][:10], info["valor"])
-		return text
-
-	def btc_bittrex(self):
-		info = requests.get("https://bittrex.com/api/v1.1/public/getticker", data={"market": "USDT-BTC"}).json()
-		dolar = float(requests.get("http://mindicador.cl/api/").json()["dolar"]["valor"])
-		text = "btc compra: US${:,.0f} -> ${:,.0f}\nbtc venta: US${:,.0f} -> ${:,.0f}".format(
-			info["result"]["Bid"], info["result"]["Bid"] * dolar,
-			info["result"]["Ask"], info["result"]["Ask"] * dolar,
-			)
-		return text
-
-	def eth_bittrex(self):
-		info = requests.get("https://bittrex.com/api/v1.1/public/getticker", data={"market": "USDT-ETH"}).json()
-		dolar = float(requests.get("http://mindicador.cl/api/").json()["dolar"]["valor"])
-		text = "eth compra: US${:,.2f} -> ${:,.0f}\neth venta: US${:,.2f} -> ${:,.0f}".format(
-			info["result"]["Bid"], info["result"]["Bid"] * dolar,
-			info["result"]["Ask"], info["result"]["Ask"] * dolar,
-			)
-		return text
+		self.fun_bot = FunBot()
+		self.crypto_bot = CryptoBot()
+		self.list_bot = ListBot()
 
 	def hi(self, msg):
 		return "Hello {}, what's up?".format(msg["from"]["first_name"] + " " + msg["from"]["last_name"])
-
-	def other_response(self):
-		return "Did you know?\n" + random.choice(FUN_FACTS)
 
 	async def open(self, initial_msg, seed):
 		# print(initial_msg)
@@ -106,15 +35,12 @@ class Player(telepot.aio.helper.ChatHandler):
 		except:
 			message = "Hi,\nwatch the commands list to make an action"
 		await self.sender.sendMessage(message)
-		try:
-			await self.on_chat_message(initial_msg)
-		except:
-			pass
-			
+		await self.on_chat_message(initial_msg)
+
 		return True  # prevent on_message() from being called on the initial message
 
 	async def on_chat_message(self, msg):
-		# print(msg) 
+		print(msg) 
 		try:
 			text = msg['text']
 		except ValueError:
@@ -123,25 +49,25 @@ class Player(telepot.aio.helper.ChatHandler):
 
 		# check the guess against the answer ...
 		try:
-			if Player.btc_re.match(text) != None:
+			if Bot.btc_re.match(text) != None:
 				response_text = self.btc()
 
-			elif Player.eth_re.match(text) != None:
+			elif Bot.eth_re.match(text) != None:
 				response_text = self.eth()
 
-			elif Player.dolar_re.match(text) != None:
+			elif Bot.dolar_re.match(text) != None:
 				response_text = self.dolar()
 
-			elif Player.btc_bittrex_re.match(text) != None:
+			elif Bot.btc_bittrex_re.match(text) != None:
 				response_text = self.btc_bittrex()
 
-			elif Player.eth_bittrex_re.match(text) != None:
+			elif Bot.eth_bittrex_re.match(text) != None:
 				response_text = self.eth_bittrex()
 
-			elif Player.hi_re.match(text) != None:
+			elif Bot.hi_re.match(text) != None:
 				response_text = self.hi(msg)
 				
-			elif Player.all_re.match(text) != None:
+			elif Bot.all_re.match(text) != None:
 				response_text = self.dolar()
 				
 				response_text += '\n\n' + self.eth()
@@ -185,7 +111,7 @@ if not TOKEN:
 
 bot = telepot.aio.DelegatorBot(TOKEN, [
     pave_event_space()(
-        per_chat_id(), create_open, Player, timeout=TIMEOUT),
+        per_chat_id(), create_open, Bot, timeout=TIMEOUT),
 ])
 
 loop = asyncio.get_event_loop()
