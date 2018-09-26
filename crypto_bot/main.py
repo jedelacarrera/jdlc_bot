@@ -68,7 +68,7 @@ class CryptoBot(object):
 		return text
 
 	def btc_bittrex(self):
-		info = requests.get("https://bittrex.com/api/v1.1/public/getticker", data={"market": "USDT-BTC"}).json()
+		info = requests.get("https://bittrex.com/api/v1.1/public/getticker?market=USDT-BTC").json()
 		dolar = float(requests.get("http://mindicador.cl/api/").json()["dolar"]["valor"])
 		text = "btc compra: US${:,.0f} -> ${:,.0f}\nbtc venta: US${:,.0f} -> ${:,.0f}".format(
 			info["result"]["Bid"], info["result"]["Bid"] * dolar,
@@ -77,7 +77,7 @@ class CryptoBot(object):
 		return text
 
 	def eth_bittrex(self):
-		info = requests.get("https://bittrex.com/api/v1.1/public/getticker", data={"market": "USDT-ETH"}).json()
+		info = requests.get("https://bittrex.com/api/v1.1/public/getticker?market=USDT-ETH").json()
 		dolar = float(requests.get("http://mindicador.cl/api/").json()["dolar"]["valor"])
 		text = "eth compra: US${:,.2f} -> ${:,.0f}\neth venta: US${:,.2f} -> ${:,.0f}".format(
 			info["result"]["Bid"], info["result"]["Bid"] * dolar,
