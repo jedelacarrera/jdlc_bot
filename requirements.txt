@@ -1,5 +1,5 @@
-asyncio==3.4.3
-requests==2.25.1
-simplejson==3.8.2
-telepot==12.3
-psycopg2==2.7.4
+asyncio
+requests
+simplejson
+telepot
+psycopg2
